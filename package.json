@@ -4,7 +4,7 @@
   "description": "Library to fetch content from multiple GitHub repositories.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npm install && mocha test --recursive --compilers js:babel-core/register",
+    "test": "mocha test --recursive --compilers js:babel-core/register",
     "test:unit": "mocha test/unit",
     "build": "gulp build"
   },
@@ -17,6 +17,9 @@
   "bugs": {
     "url": "https://github.com/stefanwalther/sammler/issues"
   },
+  "files": [
+    "./dist/"
+  ],
   "homepage": "https://github.com/stefanwalther/sammler#readme",
   "dependencies": {
     "del": "^2.2.0",
