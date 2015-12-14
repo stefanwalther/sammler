@@ -10,10 +10,10 @@ chai.use( chaiFs );
 
 let expect = chai.expect;
 let environment = process.env.NODE_ENV || "development";
+var sammler = null;
 
 describe( 'Sammler (Unit tests)', () => {
 
-	var sammler = null;
 	beforeEach( () => {
 		sammler = new Sammler();
 	} );
@@ -50,7 +50,7 @@ describe( 'Sammler (Unit tests)', () => {
 				repo: "qliksense-extension-tutorial",
 				ref: "does-not-exist"
 			};
-			return expect( sammler.getContent( def ) ).to.be.rejectedWith("No commit found for the ref does-not-exist");
+			return expect( sammler.getContent( def ) ).to.be.rejectedWith( "No commit found for the ref does-not-exist" );
 		} );
 
 	} );
@@ -98,7 +98,7 @@ describe( 'Sammler (Unit tests)', () => {
 			} );
 		} );
 		afterEach( ( done ) => {
-			if (environment === 'production') {
+			if ( environment === 'production' ) {
 				del( targetDir ).then( ( paths ) => {
 					done();
 				} );
@@ -116,13 +116,14 @@ describe( 'Sammler (Unit tests)', () => {
 
 			sammler.saveContent( gitHubContent, "dir-1", targetDir )
 				.then( ( data ) => {
+					expect( data ).to.exist;
 					expect( data ).to.be.a.file;
 					expect( data ).to.have.content( "# Just some .gitkeep file" );
 					done();
-				} , ( err ) => {
+				}, ( err ) => {
 					expect( err ).to.not.exist;
 					done();
-				})
+				} )
 
 		} );
 
