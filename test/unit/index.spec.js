@@ -106,7 +106,7 @@ describe( 'Sammler (Unit tests)', () => {
 			}
 		} );
 
-		it.only( "should save content to disk", ( done ) => {
+		it( "should save content to disk", ( done ) => {
 
 			var gitHubContent = {
 				path: "dir-1/.gitkeep",
