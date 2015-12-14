@@ -39,7 +39,7 @@
     "chai-as-promised": "^5.1.0",
     "chai-fs": "peterkc/chai-fs",
     "fs-utils": "^0.7.0",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-sourcemaps": "^1.6.0",
     "mocha": "^2.3.4"

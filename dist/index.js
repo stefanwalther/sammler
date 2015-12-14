@@ -1,12 +1,10 @@
 "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //import { Promise } from "bluebird";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-
-var _bluebird = require("bluebird");
 
 var _github = require("github");
 
@@ -20,9 +18,9 @@ var _jsYaml = require("js-yaml");
 
 var _jsYaml2 = _interopRequireDefault(_jsYaml);
 
-var _fsExtra = require("fs-extra");
+var _fs = require("fs");
 
-var _fsExtra2 = _interopRequireDefault(_fsExtra);
+var _fs2 = _interopRequireDefault(_fs);
 
 var _https = require("https");
 
@@ -57,6 +55,7 @@ var Sammler = (function () {
 		_classCallCheck(this, Sammler);
 
 		this.gitHub = null;
+		this.environment = process.env.NODE_ENV || "development";
 		this._init(config);
 	}
 
@@ -70,13 +69,17 @@ var Sammler = (function () {
 		key: "_init",
 		value: function _init(config) {
 
+			var that = this;
 			var currentConfig = this._getConfig(config);
 			this.gitHub = new _github2.default(currentConfig);
 
-			this.gitHub.authenticate({
-				type: "token",
-				token: "da69b007b894326a49c2e9e4055ccdc79d650851"
-			});
+			var authToken = process.env.NODE_SAMMLER_TOKEN;
+			if (authToken) {
+				that.gitHub.authenticate({
+					type: "oauth",
+					token: authToken
+				});
+			}
 		}
 
 		/**
@@ -90,7 +93,7 @@ var Sammler = (function () {
 		value: function _getConfig(instanceConfig) {
 			var defaultConfig = {
 				version: "3.0.0",
-				debug: false,
+				debug: false, //(this.environment === 'development') ? true : false,
 				protocol: "https",
 				timeout: 5000
 			};
@@ -107,7 +110,7 @@ var Sammler = (function () {
 		key: "getContent",
 		value: function getContent(sourceDef) {
 			var that = this;
-			return new _bluebird.Promise(function (resolved, rejected) {
+			return new Promise(function (resolved, rejected) {
 				that.gitHub.repos.getContent(sourceDef, function (err, data) {
 					if (err) {
 						rejected(err);
@@ -140,7 +143,7 @@ var Sammler = (function () {
 		key: "getContents",
 		value: function getContents(sourceDefArr) {
 			var getContentPromises = sourceDefArr.map(this.gitHub.repos.getContent);
-			return _bluebird.Promise.all(getContentPromises);
+			return Promise.all(getContentPromises);
 		}
 	}, {
 		key: "_getLocalTarget",
@@ -156,14 +159,16 @@ var Sammler = (function () {
 		value: function saveContent(gitHubContent, requestedDir, target) {
 
 			var that = this;
-			return new _bluebird.Promise(function (resolved, rejected) {
+			return new Promise(function (resolved, rejected) {
 				var localTarget = _path2.default.resolve(that._getLocalTarget(target, gitHubContent.path, requestedDir));
-				console.log('localTarget', localTarget);
 
 				_mkdirp2.default.sync(_path2.default.dirname(localTarget));
-				var file = _fsExtra2.default.createWriteStream(localTarget);
+				var file = _fs2.default.createWriteStream(localTarget);
 				_https2.default.get(gitHubContent.download_url, function (response) {
+					console.log('response.status', response.statusCode);
 					response.pipe(file);
+				}).on("error", function (e) {
+					rejected(e);
 				});
 				file.on("finish", function () {
 					file.close(function () {
@@ -171,6 +176,7 @@ var Sammler = (function () {
 					});
 				});
 				file.on("error", function (err) {
+					console.error(err);
 					rejected(err);
 				});
 			});
