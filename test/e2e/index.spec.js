@@ -85,6 +85,9 @@ describe( 'Sammler (e2e tests)', () => {
 					expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 1 );
 					expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 5 );
 					done();
+				}, ( err ) => {
+					expect( err ).to.not.exist;
+					done();
 				} )
 
 		} );

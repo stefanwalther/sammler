@@ -50,7 +50,7 @@ describe( 'Sammler (Unit tests)', () => {
 				repo: "qliksense-extension-tutorial",
 				ref: "does-not-exist"
 			};
-			return expect( sammler.getContent( def ) ).to.be.rejected;
+			return expect( sammler.getContent( def ) ).to.be.rejectedWith("No commit found for the ref does-not-exist");
 		} );
 
 	} );
@@ -119,7 +119,10 @@ describe( 'Sammler (Unit tests)', () => {
 					expect( data ).to.be.a.file;
 					expect( data ).to.have.content( "# Just some .gitkeep file" );
 					done();
-				} )
+				} , ( err ) => {
+					expect( err ).to.not.exist;
+					done();
+				})
 
 		} );
 
