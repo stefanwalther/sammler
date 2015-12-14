@@ -9,6 +9,7 @@ chai.use( chaiAsPromised );
 chai.use( chaiFs );
 
 let expect = chai.expect;
+let environment = process.env.NODE_ENV || "development";
 
 describe( 'Sammler (Unit tests)', () => {
 
@@ -97,7 +98,7 @@ describe( 'Sammler (Unit tests)', () => {
 			} );
 		} );
 		afterEach( ( done ) => {
-			if (process.env.NODE_ENV === 'production') {
+			if (environment === 'production') {
 				del( targetDir ).then( ( paths ) => {
 					done();
 				} );
