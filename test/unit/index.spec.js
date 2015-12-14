@@ -115,7 +115,7 @@ describe( 'Sammler (Unit tests)', () => {
 			};
 
 			sammler.saveContent( gitHubContent, "dir-1", targetDir )
-				.then( function ( data ) {
+				.then( ( data ) => {
 					expect( data ).to.be.a.file;
 					expect( data ).to.have.content( "# Just some .gitkeep file" );
 					done();
