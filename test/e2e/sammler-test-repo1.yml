@@ -1,0 +1,42 @@
+gitHubApi:
+  version: "3.0.0"
+  debug: false
+  protocol: "https"
+  timeout: 5000
+sources:
+  - name: "root"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: ""
+    ref: "master"
+  - name: "root-files"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: ""
+    ref: "master"
+    filter:
+      - file
+  - name: "root-license"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: "LICENSE"
+    ref: "master"
+  - name: "root-readme"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: "README.md"
+    ref: "master"
+  - name: "dir-1"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: "dir-1"
+    ref: "master"
+  - name: "dir-1-recursive"
+    user: "stefanwalther"
+    repo: "sammler-test-repo1"
+    path: "dir-1"
+    ref: "master"
+    recursive: true
+targets:
+  - name: "default"
+    path: "./.save/"

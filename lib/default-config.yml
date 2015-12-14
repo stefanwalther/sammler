@@ -1,0 +1,8 @@
+gitHubApi:
+  - version: "3.0.0"
+  - debug: false
+  - protocol: "https"
+  - timeout: 5000
+  - authentication:
+    type: "token"
+    token: ""
