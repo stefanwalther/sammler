@@ -4,6 +4,7 @@
   "description": "Library to fetch content from multiple GitHub repositories.",
   "main": "dist/index.js",
   "scripts": {
+    "test": "mocha test --compilers js:babel-core/register",
     "test:unit": "mocha test/unit",
     "build": "gulp build"
   },
