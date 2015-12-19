@@ -24,12 +24,12 @@
   "dependencies": {
     "del": "^2.2.0",
     "extend-shallow": "^2.0.1",
-    "github": "^0.2.4",
     "https": "^1.0.0",
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "lodash-deep": "^1.6.0",
     "mkdirp": "^0.5.1",
+    "octonode": "^0.7.4",
     "string": "^3.3.1"
   },
   "devDependencies": {

@@ -50,7 +50,7 @@ describe( 'Sammler (Unit tests)', () => {
 				repo: "qliksense-extension-tutorial",
 				ref: "does-not-exist"
 			};
-			return expect( sammler.getContent( def ) ).to.be.rejectedWith( "No commit found for the ref does-not-exist" );
+			return expect( sammler.getContent( def ) ).to.be.rejectedWith( "Not Found" );
 		} );
 
 	} );
@@ -61,12 +61,14 @@ describe( 'Sammler (Unit tests)', () => {
 				{
 					user: "stefanwalther",
 					repo: "qliksense-extension-tutorial",
-					path: "docs/faq"
+					path: "docs/faq",
+					ref: ""
 				},
 				{
 					user: "stefanwalther",
 					repo: "qliksense-extension-tutorial",
-					path: "docs/part-01"
+					path: "docs/part-01",
+					ref: ""
 				}
 			];
 			return expect( sammler.getContents( defs ) ).to.eventually.be.an( "array" ).of.length( 2 );
@@ -93,6 +95,7 @@ describe( 'Sammler (Unit tests)', () => {
 		var targetDir = path.join( __dirname, "./.content/" );
 
 		beforeEach( ( done ) => {
+			sammler = new Sammler();
 			del( targetDir ).then( ( paths ) => {
 				done();
 			} );
@@ -123,8 +126,7 @@ describe( 'Sammler (Unit tests)', () => {
 				}, ( err ) => {
 					expect( err ).to.not.exist;
 					done();
-				} )
-
+				} );
 		} );
 
 	} );
