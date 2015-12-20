@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stefanwalther/sammler.git"
+    "url": "git://github.com/stefanwalther/sammler.git"
   },
   "author": "Stefan Walther",
   "license": "MIT",
