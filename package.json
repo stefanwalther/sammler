@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha test --recursive --compilers js:babel-core/register",
     "test:unit": "mocha test/unit",
-    "build": "gulp build"
+    "build": "gulp build",
+    "preinstall": "npm install && npm install mocha -g"
   },
   "repository": {
     "type": "git",
