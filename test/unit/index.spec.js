@@ -51,6 +51,7 @@ describe( 'Sammler (Unit tests)', () => {
 			];
 			return expect( sammler.getContents( defs ) ).to.eventually.be.an( "array" ).of.length( 2 );
 		} );
+
 	} );
 
 	describe( "_getLocalTarget", () => {
