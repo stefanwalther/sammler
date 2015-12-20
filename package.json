@@ -7,7 +7,7 @@
     "test": "mocha test --recursive --compilers js:babel-core/register",
     "test:unit": "mocha test/unit",
     "build": "gulp build",
-    "preinstall": "npm install && npm install mocha -g"
+    "preinstall": "npm install mocha -g"
   },
   "repository": {
     "type": "git",
