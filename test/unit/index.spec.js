@@ -23,39 +23,17 @@ describe( 'Sammler (Unit tests)', () => {
 	} );
 
 	describe( "getContent", () => {
-		it( 'has method .getContent', () => {
+		it( 'should be a function', () => {
 			expect( sammler.getContent ).to.be.a( "function" );
 		} );
-		it( "should resolve for .getContent", () => {
-			let def = {
-				user: "stefanwalther",
-				repo: "qliksense-extension-tutorial",
-				path: "docs",
-				ref: "master"
-			};
-			return expect( sammler.getContent( def ) ).to.eventually.be.an( "array" ).of.length( 11 );
-		} );
-		it( "should reject for an unknown repository", () => {
-
-			let def = {
-				user: "stefanwalther",
-				repo: "does-not-exist"
-			};
-			return expect( sammler.getContent( def ) ).to.be.rejected;
-		} );
-		it( "should reject for an unknown branch", () => {
-
-			let def = {
-				user: "stefanwalther",
-				repo: "qliksense-extension-tutorial",
-				ref: "does-not-exist"
-			};
-			return expect( sammler.getContent( def ) ).to.be.rejectedWith( "Not Found" );
-		} );
-
 	} );
 
 	describe( "getContents", () => {
+
+		it( "should be a function", () => {
+			expect( sammler.getContents ).to.be.a( "function" );
+		} );
+
 		it( "should resolve for .getContents", () => {
 			let defs = [
 				{
@@ -108,6 +86,10 @@ describe( 'Sammler (Unit tests)', () => {
 			} else {
 				done();
 			}
+		} );
+
+		it( "should be a function", () => {
+			expect( sammler.saveContent ).to.be.a( "function" );
 		} );
 
 		it( "should save content to disk", ( done ) => {

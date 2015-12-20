@@ -42,6 +42,56 @@ describe( 'Sammler (e2e tests)', () => {
 			expect( _.find( config.sources, {"name": "root-files"} ) ).to.exist.and.have.property( "filter" ).of.length( 1 );
 		} );
 
+		it( "should resolve for .getContent", () => {
+			let def = {
+				user: "stefanwalther",
+				repo: "sammler-test-repo1",
+				path: "",
+				ref: "master"
+			};
+			return expect( sammler.getContent( def ) ).to.eventually.be.fulfilled;
+		} );
+
+		it( "should reject .getContent for an unknown path", () => {
+			let def = {
+				user: "stefanwalther",
+				repo: "sammler-test-repo1",
+				path: "does-not-exist",
+				ref: "master"
+			};
+			return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith("Not Found");
+		} );
+
+		it( "should reject .getContent for an unknown user", () => {
+			let def = {
+				user: "bla-bla-stefan-walther",
+				repo: "sammler-test-repo1",
+				path: "",
+				ref: "master"
+			};
+			return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith("Not Found");
+		} );
+
+		it( "should reject .getContent for an unknown rep", () => {
+			let def = {
+				user: "stefan-walther",
+				repo: "does-not-exist",
+				path: "",
+				ref: "master"
+			};
+			return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith("Not Found");
+		} );
+
+		it( "should not reject .getContent for an unknown ref", () => {
+			let def = {
+				user: "stefanwalther",
+				repo: "sammler-test-repo1",
+				path: "",
+				ref: "does-not-exist"
+			};
+			return expect( sammler.getContent( def ) ).to.eventually.be.fulfilled;
+		} );
+
 		it( "should return only files for test-config 'root-files'", ( done ) => {
 			sammler.getContent( _.find( config.sources, {"name": "root-files"} ) )
 				.then( function ( data ) {
