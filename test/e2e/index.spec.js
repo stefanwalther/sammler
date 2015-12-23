@@ -6,21 +6,7 @@ import fsUtils from "fs-utils";
 import path from "path";
 import _ from "./../../lib/lodash-extended";
 chai.use( chaiAsPromised );
-
 let expect = chai.expect;
-
-_.mixin( require( "lodash-deep" ) );
-_.mixin( {
-	'filterByValues': function ( collection, key, values ) {
-		return _.filter( collection, function ( o ) {
-			return _.contains( values, resolveKey( o, key ) );
-		} );
-	}
-} );
-
-function resolveKey ( obj, key ) {
-	return (typeof key == 'function') ? key( obj ) : _.deepGet( obj, key );
-}
 
 describe( 'Sammler (e2e tests)', () => {
 
@@ -134,7 +120,6 @@ describe( 'Sammler (e2e tests)', () => {
 				sammler.getContent( sourceConfig )
 					.then( ( data ) => {
 						expect( data ).to.exist;
-						expect( data ).to.be.an( "array" );
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 1 );
 						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 3 );
 						done();
@@ -145,17 +130,11 @@ describe( 'Sammler (e2e tests)', () => {
 
 				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
 				sourceDef.recursive = true;
-				sammler.getContentRec( sourceDef )
+				sammler.getContentRec( sourceDef, true )
 					.then( ( data ) => {
-						expect( data ).to.exist;
-						console.info("Test: Iterating through results:");
-						//console.log(data);
-						data.forEach( ( dataItem ) => {
-							console.log( "\t" + dataItem.type + ": " + dataItem.path );
-						} );
-						//console.log("data", data);
-						//expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an("array").of.length(2);
-						//expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 12 );
+						expect( data ).to.exist.and.to.be.an("array").of.length(14);
+						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an("array").of.length(0);
+						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 14 );
 						done();
 					} );
 			} );

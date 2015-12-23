@@ -52,8 +52,6 @@ var _octonode2 = _interopRequireDefault(_octonode);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Sammler = (function () {
@@ -112,57 +110,25 @@ var Sammler = (function () {
 			};
 			return (0, _extendShallow2.default)(defaultConfig, instanceConfig);
 		}
+
+		//
+
 	}, {
 		key: "getContentRec",
-		value: function getContentRec(sourceDef, data) {
+		value: function getContentRec(sourceDef) {
 			var _this = this;
 
-			var results = data || [];
-			console.log("Overall results in getContentRec: ");
-			results.forEach(function (result) {
-				console.log("\t" + result.path);
-			});
-
-			return this._getRepoContent(sourceDef.user, sourceDef.repo, sourceDef.ref, sourceDef.path).then(function (data) {
-
-				console.log("Retrieved content: ", data.length);
-				var dirs = [];
-				results = results.concat(data);
-
-				data.forEach(function (file) {
-					console.log("\t" + file.path);
-					if (file.type === "dir") {
-						dirs.push(file);
-					}
-				});
-				console.log("------------");
-
-				if (dirs.length > 0) {
-					var _ret = (function () {
-						var promises = [];
-						dirs.forEach(function (dir) {
-							var def = {
-								user: sourceDef.user,
-								repo: sourceDef.repo,
-								ref: sourceDef.ref,
-								path: dir.path
-							};
-							promises.push(_this.getContentRec(def, results));
-						});
-
-						return {
-							v: _bluebird2.default.all(promises)
-						};
-					})();
-
-					if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-				} else {
-
-					return _bluebird2.default.resolve(results);
-				}
-			}).catch(function (err) {
-				return _bluebird2.default.reject(err);
-			});
+			return this._getRepoContent(sourceDef.user, sourceDef.repo, sourceDef.ref, sourceDef.path).map(function (content) {
+				var def = {
+					user: sourceDef.user,
+					repo: sourceDef.repo,
+					ref: sourceDef.ref,
+					path: content.path
+				};
+				return content.type === "dir" ? _this.getContentRec(def) : content;
+			}).reduce(function (a, b) {
+				return a.concat(b);
+			}, []);
 		}
 
 		/**
@@ -177,8 +143,6 @@ var Sammler = (function () {
 		value: function _getRepoContent(user, repo, ref, path) {
 			var _this2 = this;
 
-			console.log("~~");
-			console.log("Get content for " + path);
 			return new _bluebird2.default(function (resolved, rejected) {
 				_this2._client.repo(user + "/" + repo, ref).contents(path, function (err, data) {
 					if (err) {
