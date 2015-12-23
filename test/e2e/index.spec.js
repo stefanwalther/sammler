@@ -149,6 +149,7 @@ describe( 'Sammler (e2e tests)', () => {
 					.then( ( data ) => {
 						expect( data ).to.exist;
 						console.info("Test: Iterating through results:");
+						//console.log(data);
 						data.forEach( ( dataItem ) => {
 							console.log( "\t" + dataItem.type + ": " + dataItem.path );
 						} );
