@@ -5,6 +5,7 @@ import chaiAsPromised from "chai-as-promised";
 import chaiFs from "chai-fs";
 import path from "path";
 import del from "del";
+import recursive from "./recursive";
 chai.use( chaiAsPromised );
 chai.use( chaiFs );
 

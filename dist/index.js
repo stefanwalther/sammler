@@ -1,14 +1,14 @@
 "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //import { Promise } from "bluebird";
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _github = require("github");
+var _bluebird = require("bluebird");
 
-var _github2 = _interopRequireDefault(_github);
+var _bluebird2 = _interopRequireDefault(_bluebird);
 
 var _lodashDeep = require("lodash-deep");
 
@@ -46,7 +46,13 @@ var _mkdirp = require("mkdirp");
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
+var _octonode = require("octonode");
+
+var _octonode2 = _interopRequireDefault(_octonode);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -54,33 +60,40 @@ var Sammler = (function () {
 	function Sammler(config) {
 		_classCallCheck(this, Sammler);
 
-		this.gitHub = null;
 		this.environment = process.env.NODE_ENV || "development";
-		this._init(config);
-	}
+		this.config = this._getConfig(config);
+		this._init(this.config);
+		this._client;
 
-	/**
-  * Initialize the instance of Sammler.
-  * @param config
-  * @private
-  */
+		var authToken = process.env.NODE_SAMMLER_TOKEN;
+		if (authToken) {
+			this._client = _octonode2.default.client(authToken);
+		} else {
+			this._client = _octonode2.default.client();
+		}
+
+		//Promise.prototype.finally = function ( callback ) {
+		//	let p = this.constructor;
+		//	// We don’t invoke the callback in here,
+		//	// because we want then() to handle its exceptions
+		//	return this.then(
+		//		// Callback fulfills: pass on predecessor settlement
+		//		// Callback rejects: pass on rejection (=omit 2nd arg.)
+		//		value  => p.resolve( callback() ).then( () => value ),
+		//		reason => p.resolve( callback() ).then( () => { throw reason } )
+		//	);
+		//};
+	}
 
 	_createClass(Sammler, [{
 		key: "_init",
-		value: function _init(config) {
 
-			var that = this;
-			var currentConfig = this._getConfig(config);
-			this.gitHub = new _github2.default(currentConfig);
-
-			var authToken = process.env.NODE_SAMMLER_TOKEN;
-			if (authToken) {
-				that.gitHub.authenticate({
-					type: "oauth",
-					token: authToken
-				});
-			}
-		}
+		/**
+   * Initialize the instance of Sammler.
+   * @param config
+   * @private
+   */
+		value: function _init(config) {}
 
 		/**
    * Get the current config
@@ -99,39 +112,141 @@ var Sammler = (function () {
 			};
 			return (0, _extendShallow2.default)(defaultConfig, instanceConfig);
 		}
+	}, {
+		key: "getContentRec",
+		value: function getContentRec(sourceDef, data) {
+			var _this = this;
+
+			var results = data || [];
+			console.log("Overall results in getContentRec: ");
+			results.forEach(function (result) {
+				console.log("\t" + result.path);
+			});
+
+			return this._getRepoContent(sourceDef.user, sourceDef.repo, sourceDef.ref, sourceDef.path).then(function (data) {
+
+				console.log("Retrieved content: ", data.length);
+				var dirs = [];
+				results = results.concat(data);
+
+				data.forEach(function (file) {
+					console.log("\t" + file.path);
+					if (file.type === "dir") {
+						dirs.push(file);
+					}
+				});
+				console.log("------------");
+
+				if (dirs.length > 0) {
+					var _ret = (function () {
+						var promises = [];
+						dirs.forEach(function (dir) {
+							var def = {
+								user: sourceDef.user,
+								repo: sourceDef.repo,
+								ref: sourceDef.ref,
+								path: dir.path
+							};
+							promises.push(_this.getContentRec(def, results));
+						});
+
+						return {
+							v: _bluebird2.default.all(promises)
+						};
+					})();
+
+					if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+				} else {
+
+					return _bluebird2.default.resolve(results);
+				}
+			}).catch(function (err) {
+				return _bluebird2.default.reject(err);
+			});
+		}
+
+		/**
+   * Promisified call to get the content
+   * @param rep
+   * @param ref
+   * @param path
+   */
+
+	}, {
+		key: "_getRepoContent",
+		value: function _getRepoContent(user, repo, ref, path) {
+			var _this2 = this;
+
+			console.log("~~");
+			console.log("Get content for " + path);
+			return new _bluebird2.default(function (resolved, rejected) {
+				_this2._client.repo(user + "/" + repo, ref).contents(path, function (err, data) {
+					if (err) {
+						rejected(err);
+					} else {
+						resolved(data);
+					}
+				});
+			});
+		}
 
 		/**
    * Get the content of a given source-definition.
    * @param sourceDef
+   * @param {String} sourceDef.user - The user (e.g. `stefanwalther`). Mandatory.
+   * @param {String} sourceDef.repo - Name of the repository (e.g. `sammler-test-repo1`). Mandatory.
+   * @param {String} sourceDef.ref - The branch, defaults to `master`.
+   * @param {String} sourceDef.path - Path to fetch contents from (e.g. `dir-1` n sammler-test-repo1). Defaults to "".
+   * @param {Boolean} recoursive - Whether to fetch contents recursively or not, defaults to false.
    * @returns {*}
    */
 
 	}, {
 		key: "getContent",
-		value: function getContent(sourceDef) {
+		value: function getContent(sourceDef, recursive) {
+			var _this3 = this;
+
+			var results = [];
 			var that = this;
-			return new Promise(function (resolved, rejected) {
-				that.gitHub.repos.getContent(sourceDef, function (err, data) {
-					if (err) {
-						rejected(err);
+			return new _bluebird2.default(function (resolved, rejected) {
+				_this3._getRepoContent(sourceDef.user, sourceDef.repo, sourceDef.ref, sourceDef.path).then(function (data) {
+					//console.log( "dir", _.find( data, {type: "dir"} ) );
+					if (recursive === true && _lodashExtended2.default.find(data, { type: "dir" })) {
+						(function () {
+
+							var fetchDirPromises = undefined;
+							_lodashExtended2.default.where(data, { type: "dir" }, function (dir) {
+								console.log("dir", dir);
+								var fetchDirDef = {
+									user: sourceDef.user,
+									repo: sourceDef.repo,
+									path: dir.path
+								};
+								console.log("fetchDirDef", fetchDirDef);
+								fetchDirPromises.push(that.getContent(fetchDirDef, recursive));
+							});
+							//return Promise.all( fetchDirPromises );
+							_bluebird2.default.all(fetchDirPromises).then(function (data) {
+								resolved(data);
+							});
+						})();
 					} else {
-
-						//if ( sourceDef.recursive === true ) {
-						//
-						//}
-
 						var filter = sourceDef.filter || ["dir", "file"];
 						var filteredData;
-
 						// only array of returned contents can be filtered, not a single item.
 						if (_lodashExtended2.default.isArray(data)) {
 							filteredData = _lodashExtended2.default.filterByValues(data, "type", filter);
 						}
 						resolved(filteredData || data);
 					}
+				}).catch(function (err) {
+					rejected(err);
 				});
 			});
 		}
+	}, {
+		key: "_getFilteredData",
+		value: function _getFilteredData() {}
 
 		/**
    * Returns the collection of source-definitions.
@@ -142,8 +257,13 @@ var Sammler = (function () {
 	}, {
 		key: "getContents",
 		value: function getContents(sourceDefArr) {
-			var getContentPromises = sourceDefArr.map(this.gitHub.repos.getContent);
-			return Promise.all(getContentPromises);
+			var _this4 = this;
+
+			var getContentPromises = [];
+			sourceDefArr.forEach(function (def) {
+				getContentPromises.push(_this4.getContent(def));
+			});
+			return _bluebird2.default.all(getContentPromises);
 		}
 	}, {
 		key: "_getLocalTarget",
@@ -159,24 +279,19 @@ var Sammler = (function () {
 		value: function saveContent(gitHubContent, requestedDir, target) {
 
 			var that = this;
-			return new Promise(function (resolved, rejected) {
+			return new _bluebird2.default(function (resolved, rejected) {
 				var localTarget = _path2.default.resolve(that._getLocalTarget(target, gitHubContent.path, requestedDir));
 
 				_mkdirp2.default.sync(_path2.default.dirname(localTarget));
 				var file = _fs2.default.createWriteStream(localTarget);
 				_https2.default.get(gitHubContent.download_url, function (response) {
-					console.log('response.status', response.statusCode);
-					response.pipe(file);
-				}).on("error", function (e) {
-					rejected(e);
-				});
-				file.on("finish", function () {
-					file.close(function () {
+					response.on("data", function (data) {
+						file.write(data);
+					}).on("end", function () {
+						file.end();
 						resolved(file.path);
 					});
-				});
-				file.on("error", function (err) {
-					console.error(err);
+				}).on("error", function (err) {
 					rejected(err);
 				});
 			});
@@ -195,6 +310,11 @@ var Sammler = (function () {
 	}, {
 		key: "saveContents",
 		value: function saveContents(sourceDefArray) {}
+	}, {
+		key: "client",
+		get: function get() {
+			return this._client;
+		}
 	}]);
 
 	return Sammler;

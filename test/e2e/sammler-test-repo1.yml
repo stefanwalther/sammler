@@ -52,12 +52,6 @@ sources:
     repo: "sammler-test-repo1"
     path: "dir-1"
     ref: "master"
-  - name: "dir-1-recursive"
-    user: "stefanwalther"
-    repo: "sammler-test-repo1"
-    path: "dir-1"
-    ref: "master"
-    recursive: true
 targets:
   - name: "default"
     path: "./.save/"
