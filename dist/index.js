@@ -296,3 +296,4 @@ var Sammler = exports.Sammler = (function () {
 
 	return Sammler;
 })();
+//# sourceMappingURL=index.js.map

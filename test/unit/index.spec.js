@@ -12,18 +12,18 @@ let expect = chai.expect;
 let environment = process.env.NODE_ENV || "development";
 var sammler = null;
 
-describe( 'Sammler (Unit tests)', () => {
+describe( "Sammler (Unit tests)", () => {
 
 	beforeEach( () => {
 		sammler = new Sammler();
 	} );
 
-	it( 'is an object', () => {
+	it( "is an object", () => {
 		expect( sammler ).to.be.an.object;
 	} );
 
 	describe( "getContent", () => {
-		it( 'should be a function', () => {
+		it( "should be a function", () => {
 			expect( sammler.getContent ).to.be.a( "function" );
 		} );
 	} );
@@ -55,7 +55,7 @@ describe( 'Sammler (Unit tests)', () => {
 			} );
 		} );
 		afterEach( ( done ) => {
-			if ( environment === 'production' ) {
+			if ( environment === "production" ) {
 				del( targetDir ).then( ( paths ) => {
 					done();
 				} );
