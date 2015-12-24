@@ -1,6 +1,6 @@
 # sammler
 
-[![Coveralls](https://img.shields.io/coveralls/stefanwalther/sammler.svg?style=flat-square)](https://img.shields.io/coveralls/stefanwalther/sammler.svg?style=flat-sq)
+[![Coveralls](https://img.shields.io/coveralls/stefanwalther/sammler.svg?style=flat-square)](https://coveralls.io/github/stefanwalther/sammler)
 
 > sammler (German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
 
