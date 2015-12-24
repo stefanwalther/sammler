@@ -8,7 +8,7 @@
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
     "build": "gulp build",
-    "preinstall": "npm install eslint mocha -g && npm install babel-register --save-dev"
+    "preinstall": "npm install eslint mocha -g"
   },
   "homepage": "https://github.com/stefanwalther/sammler#readme",
   "repository": {
@@ -21,7 +21,7 @@
     "url": "https://github.com/stefanwalther/sammler/issues"
   },
   "files": [
-    "./dist/"
+    "./dist"
   ],
   "main": "dist/index.js",
   "dependencies": {
@@ -44,13 +44,10 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
     "chai-fs": "peterkc/chai-fs",
-    "eslint": "^1.10.3",
-    "eslint-plugin-mocha-only": "0.0.3",
     "fs-utils": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-concat": "^2.6.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "mocha": "^2.3.4"
+    "gulp-sourcemaps": "^1.6.0"
   }
 }
