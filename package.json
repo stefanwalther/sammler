@@ -8,7 +8,7 @@
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
     "build": "gulp build",
-    "preinstall": "npm install eslint -g"
+    "preinstall": "npm install eslint mocha -g"
   },
   "homepage": "https://github.com/stefanwalther/sammler#readme",
   "repository": {
