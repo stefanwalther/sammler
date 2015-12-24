@@ -1,7 +1,8 @@
 import gulp from "gulp";
-import sourceMaps from "gulp-sourcemaps";
-import debug from "gulp-debug";
 import babel from "gulp-babel";
+import concat from "gulp-concat";
+import debug from "gulp-debug";
+import sourceMaps from "gulp-sourcemaps";
 import path from "path";
 
 const paths = {
@@ -12,12 +13,11 @@ const paths = {
 };
 gulp.task( 'build', () => {
 	return gulp.src( paths.es6 )
-		.pipe( sourceMaps.init() )
+		//.pipe( sourceMaps.init() )
 		.pipe( babel( {
 			presets: ['es2015']
-		} ) )
-		.pipe( sourceMaps.write( '.', {sourceRoot: paths.sourceRoot} ) )
-		.pipe( debug( {title: "build:"}) )
+		}) )
+		//.pipe( sourceMaps.write( '.', {sourceRoot: paths.sourceRoot} ) )
 		.pipe( gulp.dest( paths.es5 ) );
 } );
 gulp.task( 'watch', ['build'], () => {

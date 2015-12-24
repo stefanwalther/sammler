@@ -11,7 +11,7 @@ sources:
     repo: "sammler-test-repo1"
     path: ""
     ref: "master"
-    desc: "Root of a valid repo stefanwalther/sammler-test-repo1"
+    desc: "Root of a valid repo stefanwalther/sammler-test-repo1, including files and dirs"
   - name: "root-repo2"
     user: "stefanwalther"
     repo: "sammler-test-repo2"

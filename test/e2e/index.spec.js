@@ -1,10 +1,10 @@
 /*global describe, beforeEach, it*/
-import Sammler from "./../../lib/index.js";
+import { Sammler } from "./../../lib/index.js";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import fsUtils from "fs-utils";
 import path from "path";
-import _ from "./../../lib/lodash-extended";
+import _ from "lodash";
 chai.use( chaiAsPromised );
 let expect = chai.expect;
 
@@ -37,8 +37,8 @@ describe( 'Sammler (e2e tests)', () => {
 				sammler.getContent( _.find( config.sources, {"name": "root-files"} ) )
 					.then( ( data ) => {
 						expect( data ).to.be.an( "array" ).of.length( 6 );
-						//expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
-						//expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 6 );
+						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
+						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 6 );
 						done();
 					} )
 			} );
@@ -69,7 +69,8 @@ describe( 'Sammler (e2e tests)', () => {
 			it( "should fetch root files", ( done ) => {
 				sammler.getContent( _.find( config.sources, {"name": "root-repo1"} ) )
 					.then( function ( data ) {
-						expect( data ).to.be.of.length( 7 );
+						console.log("data", data);
+						expect( data ).to.be.of.length( 8 );
 						done();
 					} )
 			} );
@@ -104,14 +105,22 @@ describe( 'Sammler (e2e tests)', () => {
 				return expect( sammler.getContent( def ) ).to.eventually.be.fulfilled;
 			} );
 
-			it( "should be able to fetch a single file w file extension (README.md)", () => {
+			it( "should be able to fetch a single file w file extension (README.md)", ( done ) => {
 				var sourceConfig = _.find( config.sources, {"name": "root-readme"} );
-				return expect( sammler.getContent( sourceConfig ) ).to.eventually.have.property( "name", "README.md" );
+				sammler.getContent( sourceConfig ).then( ( data ) => {
+					expect( data ).to.be.an( "array" ).of.length( 1 );
+					expect( data[0]).to.have.property("name", "README.md");
+					done();
+				} );
 			} );
 
-			it( "should be able to fetch a single file w/o file extension (LICENSE)", () => {
+			it( "should be able to fetch a single file w/o file extension (LICENSE)", ( done ) => {
 				var sourceConfig = _.find( config.sources, {"name": "root-license"} );
-				return expect( sammler.getContent( sourceConfig ) ).to.eventually.have.property( "name", "LICENSE" );
+				sammler.getContent( sourceConfig ).then( ( data ) => {
+					expect( data ).to.be.an( "array" ).of.length( 1 );
+					expect( data[0]).to.have.property("name", "LICENSE");
+					done();
+				} );
 			} );
 
 			it( "should be able to fetch a directory with all the contents (non recursive)", ( done ) => {
@@ -126,58 +135,22 @@ describe( 'Sammler (e2e tests)', () => {
 					} )
 			} );
 
-			it.only( "should retrieve contents recursively", ( done ) => {
+			it( "should retrieve contents recursively", ( done ) => {
 
 				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
 				sourceDef.recursive = true;
-				sammler.getContentRec( sourceDef, true )
+				sammler.getContent( sourceDef )
 					.then( ( data ) => {
-						expect( data ).to.exist.and.to.be.an("array").of.length(14);
-						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an("array").of.length(0);
-						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 14 );
+						expect( data ).to.exist.and.to.be.an( "array" ).of.length( 16 );
+						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
+						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 16 );
 						done();
 					} );
 			} );
 
 		} );
 
-		describe( "getContents", () => {
-
-			it( "should be resolved with valid sourceDefs", () => {
-
-				var sourceDefs = [];
-				sourceDefs.push( _.find( config.sources, {"name": "root-repo1"} ) );
-				sourceDefs.push( _.find( config.sources, {"name": "root-repo2"} ) );
-
-				return expect( sammler.getContent( sourceDefs ) ).to.eventually.be.rejected;
-			} );
-
-			it( "should be rejected if one of the sourceDefs is rejected", () => {
-
-				var sourceDefs = [];
-				sourceDefs.push( _.find( config.sources, {"name": "root-repo1"} ) );
-				sourceDefs.push( _.find( config.sources, {"name": "root-repo-eh-eh"} ) );
-
-				return expect( sammler.getContent( sourceDefs ) ).to.eventually.be.rejectedWith( "Not Found" );
-			} );
-		} );
-
-		it.skip( "should be able to fetch a directory recursively", ( done ) => {
-
-			var sourceDefs = _.find( config.sources, {"name": "dir-1-recursive"} );
-			sammler.getContent( sourceDefs )
-				.then( ( data ) => {
-					expect( data ).to.exist;
-					expect( data ).to.be.an( "array" );
-					//expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 1 );
-					//expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 5 );
-					done();
-				}, ( err ) => {
-					expect( err ).to.not.exist;
-					done();
-				} )
-
-		} );
+		describe( "saveContent")
 
 	} );
 } );
