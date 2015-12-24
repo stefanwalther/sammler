@@ -1,5 +1,6 @@
 # sammler
 
+[![Codeship Status for stefanwalther/sammler](https://img.shields.io/codeship/3f7e9fc0-8c86-0133-d825-1e10e5e69df6.svg?style=flat-square)](https://codeship.com/projects/3f7e9fc0-8c86-0133-d825-1e10e5e69df6)
 [![Coveralls](https://img.shields.io/coveralls/stefanwalther/sammler.svg?style=flat-square)](https://coveralls.io/github/stefanwalther/sammler)
 
 > sammler (German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
