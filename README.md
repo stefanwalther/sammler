@@ -1,4 +1,4 @@
-# sammler
+# sammler [![Coverage Status](https://coveralls.io/repos/stefanwalther/sammler/badge.png?branch=master)](https://coveralls.io/r/stefanwalther/sammler?branch=master)
 
 > sammler (German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
 
@@ -14,6 +14,8 @@
 * [Usage](#usage)
 * [FAQ](#faq)
   - [GitHub limits](#github-limits)
+* [Contributing](#contributing)
+* [Tests](#tests)
 * [Author](#author)
 * [License](#license)
 
@@ -123,6 +125,34 @@ del( targetDir ).then( function () { // Clean the targetDir ...
 ### GitHub limits
 
 To overcome the GitHub Api limits create an environment variable called `NODE_SAMMLER_TOKEN`.
+
+## Contributing
+
+## Tests
+
+Before running tests, install mocha
+
+```sh
+npm install mocha -g
+```
+
+### Run all tests
+
+```sh
+npm run test
+```
+
+### Run unit tests
+
+```sh
+npm run test:unit
+```
+
+### Run e2e tests
+
+```sh
+npm run test:e2e
+```
 
 ## Author
 
