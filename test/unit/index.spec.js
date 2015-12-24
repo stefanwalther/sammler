@@ -1,10 +1,10 @@
-/*global describe, beforeEach, afterEach, it*/
 import { Sammler } from "./../../lib/index.js";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import chaiFs from "chai-fs";
 import path from "path";
 import del from "del";
+
 chai.use( chaiAsPromised );
 chai.use( chaiFs );
 
@@ -68,7 +68,7 @@ describe( 'Sammler (Unit tests)', () => {
 			expect( sammler._saveContent ).to.be.a( "function" );
 		} );
 
-		it.only( "should save content to disk", ( done ) => {
+		it( "should save content to disk", ( done ) => {
 
 			var gitHubContent = {
 				path: "dir-1/.gitkeep",

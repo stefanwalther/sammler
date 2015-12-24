@@ -1,0 +1,19 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "ecmaFeatures": {
+    "modules": true
+  },
+  "globals": {
+    "chai": true,
+    "describe": true,
+    "it": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "sinon": true,
+    "expect": true
+  }
+}

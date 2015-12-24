@@ -1,11 +1,12 @@
-/*global describe, beforeEach, it*/
 import { Sammler } from "./../../lib/index.js";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import fsUtils from "fs-utils";
 import path from "path";
 import _ from "lodash";
+
 chai.use( chaiAsPromised );
+
 let expect = chai.expect;
 
 describe( 'Sammler (e2e tests)', () => {
@@ -69,7 +70,6 @@ describe( 'Sammler (e2e tests)', () => {
 			it( "should fetch root files", ( done ) => {
 				sammler.getContent( _.find( config.sources, {"name": "root-repo1"} ) )
 					.then( function ( data ) {
-						console.log("data", data);
 						expect( data ).to.be.of.length( 8 );
 						done();
 					} )
@@ -150,7 +150,6 @@ describe( 'Sammler (e2e tests)', () => {
 
 		} );
 
-		describe( "saveContent")
 
 	} );
 } );

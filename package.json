@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
-    "test": "mocha test --recursive --compilers js:babel-core/register",
-    "test:unit": "mocha test/unit",
+    "test": "mocha test/unit/**/*.spec.js --compilers js:babel-core/register",
+    "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-core/register",
+    "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-core/register",
     "build": "gulp build",
     "preinstall": "npm install mocha -g"
   },
@@ -41,6 +42,8 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
     "chai-fs": "peterkc/chai-fs",
+    "eslint": "^1.10.3",
+    "eslint-plugin-mocha-only": "0.0.3",
     "fs-utils": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
