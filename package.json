@@ -13,7 +13,7 @@
   "homepage": "https://github.com/stefanwalther/sammler#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/stefanwalther/sammler.git"
+    "url": "http://github.com/stefanwalther/sammler.git"
   },
   "author": "Stefan Walther",
   "license": "MIT",
