@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
+    "lint": "eslint src",
     "test": "mocha test/unit/**/*.spec.js --compilers js:babel-core/register",
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-core/register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-core/register",
