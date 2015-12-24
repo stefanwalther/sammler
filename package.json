@@ -8,7 +8,9 @@
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
     "build": "gulp build",
-    "preinstall": "npm install eslint mocha -g"
+    "preinstall": "npm install eslint mocha -g",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "homepage": "https://github.com/stefanwalther/sammler#readme",
   "repository": {
