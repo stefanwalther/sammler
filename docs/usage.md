@@ -51,7 +51,7 @@ sammler.getContent( sourceDef )
 
 ```
 
-#### saveContents()
+#### saveContents( sourceDef, gitHubContents, targetDir)
 
 ```js
 "use strict";
