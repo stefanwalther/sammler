@@ -1,0 +1,16 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "chai": true,
+    "sinon": true,
+    "expect": true
+  },
+  "rules": {
+    "no-unused-expressions": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": 0,
+    "camelcase": 0
+  }
+}

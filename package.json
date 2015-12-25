@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
-    "lint": "eslint lib",
+    "eslint": "eslint lib",
     "test": "mocha --recursive --compilers js:babel-register",
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
@@ -47,6 +47,7 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
     "chai-fs": "peterkc/chai-fs",
+    "eslint": "^1.10.3",
     "fs-utils": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",

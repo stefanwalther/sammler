@@ -1,17 +1,17 @@
 {
   "env": {
-    "browser": true,
+    "browser": false,
     "es6": true,
     "node": true,
-    "mocha": true
+    "mocha": false
   },
   "ecmaFeatures": {
     "modules": true
   },
   "globals": {
-    "chai": true,
-    "sinon": true,
-    "expect": true
+    "chai": false,
+    "sinon": false,
+    "expect": false
   },
   "extends": "eslint:recommended",
   "rules": {

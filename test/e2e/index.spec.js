@@ -1,3 +1,4 @@
+/* global define, it, describe, beforeEach, afterEach */
 import { Sammler } from "./../../lib/index.js";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
@@ -9,13 +10,13 @@ chai.use( chaiAsPromised );
 
 let expect = chai.expect;
 
-describe( 'Sammler (e2e tests)', () => {
+describe( "Sammler (e2e tests)", () => {
 
 	var sammler = null;
 
 	describe( "when fetching a single repo (sammler-test-reop1)", () => {
 
-		var config = fsUtils.readYAMLSync( path.join( __dirname, './sammler-test-repo1.yml' ) );
+		var config = fsUtils.readYAMLSync( path.join( __dirname, "./sammler-test-repo1.yml" ) );
 
 		beforeEach( () => {
 			sammler = new Sammler( config.gitHubApi );
@@ -41,7 +42,7 @@ describe( 'Sammler (e2e tests)', () => {
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
 						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 6 );
 						done();
-					} )
+					} );
 			} );
 		} );
 
@@ -72,7 +73,7 @@ describe( 'Sammler (e2e tests)', () => {
 					.then( function ( data ) {
 						expect( data ).to.be.of.length( 8 );
 						done();
-					} )
+					} );
 			} );
 
 			it( "should reject .getContent for an unknown user", () => {
@@ -109,7 +110,7 @@ describe( 'Sammler (e2e tests)', () => {
 				var sourceConfig = _.find( config.sources, {"name": "root-readme"} );
 				sammler.getContent( sourceConfig ).then( ( data ) => {
 					expect( data ).to.be.an( "array" ).of.length( 1 );
-					expect( data[0]).to.have.property("name", "README.md");
+					expect( data[0] ).to.have.property( "name", "README.md" );
 					done();
 				} );
 			} );
@@ -118,7 +119,7 @@ describe( 'Sammler (e2e tests)', () => {
 				var sourceConfig = _.find( config.sources, {"name": "root-license"} );
 				sammler.getContent( sourceConfig ).then( ( data ) => {
 					expect( data ).to.be.an( "array" ).of.length( 1 );
-					expect( data[0]).to.have.property("name", "LICENSE");
+					expect( data[0] ).to.have.property( "name", "LICENSE" );
 					done();
 				} );
 			} );
@@ -132,7 +133,7 @@ describe( 'Sammler (e2e tests)', () => {
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 1 );
 						expect( _.filterByValues( data, "type", ["file"] ) ).to.be.an( "array" ).of.length( 3 );
 						done();
-					} )
+					} );
 			} );
 
 			it( "should retrieve contents recursively", ( done ) => {
@@ -149,7 +150,6 @@ describe( 'Sammler (e2e tests)', () => {
 			} );
 
 		} );
-
 
 	} );
 } );
