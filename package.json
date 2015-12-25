@@ -8,8 +8,8 @@
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
     "build": "gulp build",
-    "preinstall": "npm install eslint mocha -g",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "preinstall": "npm install eslint istanbul -g",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- test/**/*.spec.js --compilers js:babel-register",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "homepage": "https://github.com/stefanwalther/sammler#readme",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "babel": "^6.3.26",
     "babel-core": "^6.3.26",
+    "babel-istanbul": "^0.5.9",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
@@ -50,6 +51,7 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-concat": "^2.6.0",
-    "gulp-sourcemaps": "^1.6.0"
+    "gulp-sourcemaps": "^1.6.0",
+    "mocha": "^2.3.4"
   }
 }
