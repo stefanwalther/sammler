@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint lib",
     "test": "mocha --recursive --compilers js:babel-register",
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
