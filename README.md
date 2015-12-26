@@ -62,7 +62,22 @@ var sourceDef = {
 }
 ```
 
+***
+
+#### GitHub Content
+
 ### Methods
+
+#### `fetchContents( sourceDef, gitHubContents, targetDir )`
+
+> Retrieve gitHub contents based on a source-definition and store the results to the given target directory.
+Basically calls .getContent() and then .saveContents()
+
+**Parameters**
+
+* `sourceDef` - see Source Definition
+* `gitHubContents` - Retrieved gitHub contents
+* `targetDir` - Local target directory.
 
 #### `getContent( sourceDef )`
 
