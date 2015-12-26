@@ -2,7 +2,8 @@ Use ***sammler*** to fetch contents from GitHub to store them locally.
 
 ### General concepts
 
-A *source definition* contains the following properties:
+#### Source Definition
+A **source definition** contains the following properties:
 
 - `user` - The user on GitHub (e.g. `stefanwalther`). Mandatory.
 - `repo` - Name of the repository (e.g. `sammler-test-repo1`). Mandatory.
@@ -10,12 +11,28 @@ A *source definition* contains the following properties:
 - `path` - Path to fetch contents from (e.g. `dir-1` n sammler-test-repo1). Defaults to "".
 - `recursive` - Whether to fetch contents recursively or not, defaults to false.
 
+**Example:**
+
+```js
+var sourceDef = {
+	"user": "stefanwalther",
+	"repo": "sammler-test-repo1",
+	"ref": "",
+	"path": "dir-1",
+	"recursive": true
+}
+```
 
 ### Methods
 
 #### `getContent( sourceDef )`
 
-Retrieve contents from GitHub, based on a single source definition.
+> Retrieve contents from GitHub, based on a single source definition.
+
+**Parameters**
+- {Object} `sourceDef` - Source definition object.
+
+**Example**
 
 ```js
 "use strict";

@@ -3,6 +3,6 @@
 node_modules/
 npm-debug.log
 coverage/
-test/unit/.content/
+test/**/.content/
 docs/recipes/.content/
 todo.md

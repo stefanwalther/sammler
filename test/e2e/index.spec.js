@@ -5,6 +5,7 @@ import chaiAsPromised from "chai-as-promised";
 import fsUtils from "fs-utils";
 import path from "path";
 import _ from "lodash";
+import del from "del";
 
 chai.use( chaiAsPromised );
 
@@ -149,6 +150,28 @@ describe( "Sammler (e2e tests)", () => {
 					} );
 			} );
 
+		} );
+
+		describe( "fetchContents", () => {
+
+			const targetDir = path.join( __dirname, "./.content" );
+			beforeEach( ( done ) => {
+				del( targetDir ).then( function () {
+					done();
+				} );
+			} );
+
+			//Todo: Add more tests
+			//Todo: Add negative tests
+			it( "saves results recursively for root-rep1", ( done ) => {
+				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
+				sourceDef.recursive = true;
+				sammler.fetchContents( sourceDef, path.normalize( targetDir ) )
+					.then( ( data ) => {
+						expect( data).to.exist;
+						done();
+					} );
+			} );
 		} );
 
 	} );

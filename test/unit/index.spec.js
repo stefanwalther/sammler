@@ -45,13 +45,13 @@ describe( "Sammler (Unit tests)", () => {
 
 	} );
 
-	describe( "saveContent", () => {
+	describe( "_saveContent", () => {
 
 		var targetDir = path.join( __dirname, "./.content/" );
 
 		beforeEach( ( done ) => {
 			sammler = new Sammler();
-			del( targetDir ).then( ( paths ) => {
+			del( targetDir ).then( ( /*paths*/ ) => {
 				done();
 			} );
 		} );
@@ -86,5 +86,11 @@ describe( "Sammler (Unit tests)", () => {
 		} );
 
 	} );
+
+	describe( "fetchContents", () => {
+		it( "should be a function", () => {
+			expect( sammler.fetchContents ).to.be.a( "function" );
+		} );
+	});
 
 } );

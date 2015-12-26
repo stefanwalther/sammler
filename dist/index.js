@@ -51,17 +51,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function resolveKey(obj, key) {
+	return typeof key === "function" ? key(obj) : _lodash2.default.deepGet(obj, key);
+}
 _lodash2.default.mixin(_lodashDeep2.default);
 _lodash2.default.mixin({
-	'filterByValues': function filterByValues(collection, key, values) {
+	"filterByValues": function filterByValues(collection, key, values) {
 		return _lodash2.default.filter(collection, function (o) {
 			return _lodash2.default.contains(values, resolveKey(o, key));
 		});
 	}
 });
-function resolveKey(obj, key) {
-	return typeof key == 'function' ? key(obj) : _lodash2.default.deepGet(obj, key);
-}
 
 var Sammler = exports.Sammler = (function () {
 	function Sammler(config) {
@@ -70,7 +70,7 @@ var Sammler = exports.Sammler = (function () {
 		this.environment = process.env.NODE_ENV || "development";
 		this.config = this._getConfig(config);
 		this._init(this.config);
-		this._client;
+		this._client = null;
 
 		var authToken = process.env.NODE_SAMMLER_TOKEN;
 		if (authToken) {
@@ -88,7 +88,7 @@ var Sammler = exports.Sammler = (function () {
    * @param config
    * @private
    */
-		value: function _init(config) {}
+		value: function _init() /*config*/{}
 
 		/**
    * Get the content of a given source-definition.
@@ -110,9 +110,9 @@ var Sammler = exports.Sammler = (function () {
 
 		/**
    * Save contents to disk.
-   * @param {Object}sourceDef
-   * @param {Object}gitHubContents
-   * @param {String}targetDir
+   * @param {Object}sourceDef - The source definition.
+   * @param {Object}gitHubContents - Retrieved gitHub contents.
+   * @param {String}targetDir - The local target directory.
    */
 
 	}, {
@@ -120,7 +120,8 @@ var Sammler = exports.Sammler = (function () {
 		value: function saveContents(sourceDef, gitHubContents, targetDir) {
 			var _this = this;
 
-			return new _bluebird2.default(function (resolved, rejected) {
+			//Todo: Returning the initial promise is not necessary => test it.
+			return new _bluebird2.default(function () /*resolved, rejected*/{
 				if (_this._arrayIfy(gitHubContents)) {
 					var promises = [];
 					gitHubContents.forEach(function (ghContent) {
@@ -132,6 +133,17 @@ var Sammler = exports.Sammler = (function () {
 				}
 			});
 		}
+
+		/**
+   * Retrieve gitHub contents based on a source-definition and store the results to the given target directory.
+   * Basically calls .getContent() and then .saveContents()
+   * @param sourceDef
+   * @param targetDir
+   */
+
+	}, {
+		key: "fetchContents",
+		value: function fetchContents(sourceDef, targetDir) {}
 
 		// ****************************************************************************************
 		// Private methods
@@ -187,7 +199,7 @@ var Sammler = exports.Sammler = (function () {
 		value: function _getConfig(instanceConfig) {
 			var defaultConfig = {
 				version: "3.0.0",
-				debug: false, //(this.environment === 'development') ? true : false,
+				debug: false, //(this.environment === "development") ? true : false,
 				protocol: "https",
 				timeout: 5000
 			};
@@ -199,16 +211,16 @@ var Sammler = exports.Sammler = (function () {
    * (Since octonode is just used here and in _init, octonode could be replaced easily with another lib)
    * @param rep
    * @param ref
-   * @param path
+   * @param ghPath
    */
 
 	}, {
 		key: "_getRepoContent",
-		value: function _getRepoContent(user, repo, ref, path) {
+		value: function _getRepoContent(user, repo, ref, ghPath) {
 			var _this2 = this;
 
 			return new _bluebird2.default(function (resolved, rejected) {
-				_this2._client.repo(user + "/" + repo, ref).contents(path, function (err, data) {
+				_this2._client.repo(user + "/" + repo, ref).contents(ghPath, function (err, data) {
 					if (err) {
 						rejected(err);
 					} else {
@@ -252,7 +264,7 @@ var Sammler = exports.Sammler = (function () {
 		value: function _getLocalTarget(localTarget, gitHubFile, gitHubPath) {
 
 			var baseLocalPath = localTarget;
-			var file = (0, _string2.default)(gitHubFile).chompLeft(gitHubPath).chompLeft('/').s;
+			var file = (0, _string2.default)(gitHubFile).chompLeft(gitHubPath).chompLeft("/").s;
 
 			return _path2.default.normalize(_path2.default.join(baseLocalPath, file));
 		}
