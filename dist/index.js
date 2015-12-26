@@ -120,18 +120,15 @@ var Sammler = exports.Sammler = (function () {
 		value: function saveContents(sourceDef, gitHubContents, targetDir) {
 			var _this = this;
 
-			//Todo: Returning the initial promise is not necessary => test it.
-			return new _bluebird2.default(function () /*resolved, rejected*/{
-				if (_this._arrayIfy(gitHubContents)) {
-					var promises = [];
-					gitHubContents.forEach(function (ghContent) {
-						promises.push(_this._saveContent(ghContent, sourceDef.path, targetDir));
-					});
-					return _bluebird2.default.all(promises);
-				} else {
-					throw new Error("No contents passed to save!");
-				}
-			});
+			if (this._arrayIfy(gitHubContents)) {
+				var promises = [];
+				gitHubContents.forEach(function (ghContent) {
+					promises.push(_this._saveContent(ghContent, sourceDef.path, targetDir));
+				});
+				return _bluebird2.default.all(promises);
+			} else {
+				return _bluebird2.default.rejected("No contents passed to save!");
+			}
 		}
 
 		/**
@@ -143,7 +140,17 @@ var Sammler = exports.Sammler = (function () {
 
 	}, {
 		key: "fetchContents",
-		value: function fetchContents(sourceDef, targetDir) {}
+		value: function fetchContents(sourceDef, targetDir) {
+			var _this2 = this;
+
+			return new _bluebird2.default(function (resolved, rejected) {
+				_this2.getContent(sourceDef).then(function (gitHubContents) {
+					_this2.saveContents(sourceDef, gitHubContents, targetDir).then(function (data) {
+						resolved(data);
+					});
+				});
+			});
+		}
 
 		// ****************************************************************************************
 		// Private methods
@@ -217,14 +224,14 @@ var Sammler = exports.Sammler = (function () {
 	}, {
 		key: "_getRepoContent",
 		value: function _getRepoContent(user, repo, ref, ghPath) {
-			var _this2 = this;
+			var _this3 = this;
 
 			return new _bluebird2.default(function (resolved, rejected) {
-				_this2._client.repo(user + "/" + repo, ref).contents(ghPath, function (err, data) {
+				_this3._client.repo(user + "/" + repo, ref).contents(ghPath, function (err, data) {
 					if (err) {
 						rejected(err);
 					} else {
-						resolved(_this2._arrayIfy(data));
+						resolved(_this3._arrayIfy(data));
 					}
 				});
 			});
@@ -232,7 +239,7 @@ var Sammler = exports.Sammler = (function () {
 	}, {
 		key: "_getSingleContent",
 		value: function _getSingleContent(sourceDef) {
-			var _this3 = this;
+			var _this4 = this;
 
 			return this._getRepoContent(sourceDef.user, sourceDef.repo, sourceDef.ref, sourceDef.path).map(function (content) {
 				var def = {
@@ -242,9 +249,9 @@ var Sammler = exports.Sammler = (function () {
 					path: content.path,
 					recursive: sourceDef.recursive
 				};
-				return content.type === "dir" && sourceDef.recursive === true ? _this3._getSingleContent(def) : content;
+				return content.type === "dir" && sourceDef.recursive === true ? _this4._getSingleContent(def) : content;
 			}).then(function (data) {
-				return sourceDef.filter ? _this3._filter(data, sourceDef.filter) : _bluebird2.default.resolve(data);
+				return sourceDef.filter ? _this4._filter(data, sourceDef.filter) : _bluebird2.default.resolve(data);
 			}).reduce(function (a, b) {
 				return a.concat(b);
 			}, []);
@@ -280,10 +287,10 @@ var Sammler = exports.Sammler = (function () {
 	}, {
 		key: "_saveContent",
 		value: function _saveContent(gitHubContent, requestedDir, target) {
-			var _this4 = this;
+			var _this5 = this;
 
 			return new _bluebird2.default(function (resolved, rejected) {
-				var localTarget = _path2.default.resolve(_this4._getLocalTarget(target, gitHubContent.path, requestedDir));
+				var localTarget = _path2.default.resolve(_this5._getLocalTarget(target, gitHubContent.path, requestedDir));
 
 				_mkdirp2.default.sync(_path2.default.dirname(localTarget));
 				var file = _fs2.default.createWriteStream(localTarget);
