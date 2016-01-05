@@ -22,7 +22,7 @@ var sourceDef = {
 	"recursive": true
 }
 ```
----
+
 #### GitHub Content
 
 (TBD)
