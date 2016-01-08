@@ -5,7 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.Sammler = undefined;
+exports.SammlerGitHub = undefined;
 
 var _bluebird = require("bluebird");
 
@@ -63,9 +63,9 @@ _lodash2.default.mixin({
 	}
 });
 
-var Sammler = exports.Sammler = (function () {
-	function Sammler(config) {
-		_classCallCheck(this, Sammler);
+var SammlerGitHub = exports.SammlerGitHub = (function () {
+	function SammlerGitHub(config) {
+		_classCallCheck(this, SammlerGitHub);
 
 		this.environment = process.env.NODE_ENV || "development";
 		this.config = this._getConfig(config);
@@ -80,7 +80,7 @@ var Sammler = exports.Sammler = (function () {
 		}
 	}
 
-	_createClass(Sammler, [{
+	_createClass(SammlerGitHub, [{
 		key: "_init",
 
 		/**
@@ -313,6 +313,6 @@ var Sammler = exports.Sammler = (function () {
 		}
 	}]);
 
-	return Sammler;
+	return SammlerGitHub;
 })();
 //# sourceMappingURL=index.js.map

@@ -13,18 +13,18 @@ let expect = chai.expect;
 
 describe( "Sammler (e2e tests)", () => {
 
-	var sammler = null;
+	var sammlerGitHub = null;
 
 	describe( "when fetching a single repo (sammler-test-reop1)", () => {
 
 		var config = fsUtils.readYAMLSync( path.join( __dirname, "./sammler-test-repo1.yml" ) );
 
 		beforeEach( () => {
-			sammler = new Sammler( config.gitHubApi );
+			sammlerGitHub = new SammlerGitHub( config.gitHubApi );
 		} );
 
 		it( "should be a proper object", () => {
-			expect( sammler ).to.be.an.object;
+			expect( sammlerGitHub ).to.be.an.object;
 		} );
 
 		describe( "test-setup", () => {
@@ -37,7 +37,7 @@ describe( "Sammler (e2e tests)", () => {
 			} );
 
 			it( "should return only files for test-config 'root-files'", ( done ) => {
-				sammler.getContent( _.find( config.sources, {"name": "root-files"} ) )
+				sammlerGitHub.getContent( _.find( config.sources, {"name": "root-files"} ) )
 					.then( ( data ) => {
 						expect( data ).to.be.an( "array" ).of.length( 6 );
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
@@ -56,7 +56,7 @@ describe( "Sammler (e2e tests)", () => {
 					path: "",
 					ref: "master"
 				};
-				return expect( sammler.getContent( def ) ).to.eventually.be.fulfilled;
+				return expect( sammlerGitHub.getContent( def ) ).to.eventually.be.fulfilled;
 			} );
 
 			it( "should reject .getContent for an unknown path", () => {
@@ -66,11 +66,11 @@ describe( "Sammler (e2e tests)", () => {
 					path: "does-not-exist",
 					ref: "master"
 				};
-				return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
+				return expect( sammlerGitHub.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
 			} );
 
 			it( "should fetch root files", ( done ) => {
-				sammler.getContent( _.find( config.sources, {"name": "root-repo1"} ) )
+				sammlerGitHub.getContent( _.find( config.sources, {"name": "root-repo1"} ) )
 					.then( function ( data ) {
 						expect( data ).to.be.of.length( 8 );
 						done();
@@ -84,7 +84,7 @@ describe( "Sammler (e2e tests)", () => {
 					path: "",
 					ref: "master"
 				};
-				return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
+				return expect( sammlerGitHub.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
 			} );
 
 			it( "should reject .getContent for an unknown rep", () => {
@@ -94,7 +94,7 @@ describe( "Sammler (e2e tests)", () => {
 					path: "",
 					ref: "master"
 				};
-				return expect( sammler.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
+				return expect( sammlerGitHub.getContent( def ) ).to.eventually.be.rejectedWith( "Not Found" );
 			} );
 
 			it( "should not reject .getContent for an unknown ref", () => {
@@ -104,12 +104,12 @@ describe( "Sammler (e2e tests)", () => {
 					path: "",
 					ref: "does-not-exist"
 				};
-				return expect( sammler.getContent( def ) ).to.eventually.be.fulfilled;
+				return expect( sammlerGitHub.getContent( def ) ).to.eventually.be.fulfilled;
 			} );
 
 			it( "should be able to fetch a single file w file extension (README.md)", ( done ) => {
 				var sourceConfig = _.find( config.sources, {"name": "root-readme"} );
-				sammler.getContent( sourceConfig ).then( ( data ) => {
+				sammlerGitHub.getContent( sourceConfig ).then( ( data ) => {
 					expect( data ).to.be.an( "array" ).of.length( 1 );
 					expect( data[0] ).to.have.property( "name", "README.md" );
 					done();
@@ -118,7 +118,7 @@ describe( "Sammler (e2e tests)", () => {
 
 			it( "should be able to fetch a single file w/o file extension (LICENSE)", ( done ) => {
 				var sourceConfig = _.find( config.sources, {"name": "root-license"} );
-				sammler.getContent( sourceConfig ).then( ( data ) => {
+				sammlerGitHub.getContent( sourceConfig ).then( ( data ) => {
 					expect( data ).to.be.an( "array" ).of.length( 1 );
 					expect( data[0] ).to.have.property( "name", "LICENSE" );
 					done();
@@ -128,7 +128,7 @@ describe( "Sammler (e2e tests)", () => {
 			it( "should be able to fetch a directory with all the contents (non recursive)", ( done ) => {
 
 				var sourceConfig = _.find( config.sources, {"name": "dir-1"} );
-				sammler.getContent( sourceConfig )
+				sammlerGitHub.getContent( sourceConfig )
 					.then( ( data ) => {
 						expect( data ).to.exist;
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 1 );
@@ -141,7 +141,7 @@ describe( "Sammler (e2e tests)", () => {
 
 				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
 				sourceDef.recursive = true;
-				sammler.getContent( sourceDef )
+				sammlerGitHub.getContent( sourceDef )
 					.then( ( data ) => {
 						expect( data ).to.exist.and.to.be.an( "array" ).of.length( 16 );
 						expect( _.filterByValues( data, "type", ["dir"] ) ).to.be.an( "array" ).of.length( 0 );
@@ -166,7 +166,7 @@ describe( "Sammler (e2e tests)", () => {
 			it( "saves results recursively for root-rep1", ( done ) => {
 				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
 				sourceDef.recursive = true;
-				sammler.fetchContents( sourceDef, path.normalize( targetDir ) )
+				sammlerGitHub.fetchContents( sourceDef, path.normalize( targetDir ) )
 					.then( ( data ) => {
 						expect( data).to.exist;
 						done();

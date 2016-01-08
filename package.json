@@ -1,6 +1,6 @@
 {
   "name": "sammler-github",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
     "eslint": "eslint lib",
