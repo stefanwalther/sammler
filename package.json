@@ -8,14 +8,13 @@
     "test:unit": "mocha test/unit/**/*.spec.js --compilers js:babel-register",
     "test:e2e": "mocha test/e2e/**/*.spec.js --compilers js:babel-register",
     "build": "gulp build",
-    "preinstall": "npm install eslint istanbul -g",
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive --compilers js:babel-register",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "homepage": "https://github.com/stefanwalther/sammler-github#readme",
   "repository": {
     "type": "git",
-    "url": "http://github.com/stefanwalther/sammler-github.git"
+    "url": "https://github.com/stefanwalther/sammler-github.git"
   },
   "author": "Stefan Walther",
   "license": "MIT",
@@ -53,6 +52,7 @@
     "gulp-babel": "^6.1.1",
     "gulp-concat": "^2.6.0",
     "gulp-sourcemaps": "^1.6.0",
+    "istanbul": "^0.4.1",
     "mocha": "^2.3.4"
   }
 }
