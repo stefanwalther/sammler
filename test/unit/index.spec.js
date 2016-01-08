@@ -50,7 +50,7 @@ describe( "Sammler (Unit tests)", () => {
 		var targetDir = path.join( __dirname, "./.content/" );
 
 		beforeEach( ( done ) => {
-			sammlerGitHub = new Sammler();
+			sammlerGitHub = new SammlerGitHub();
 			del( targetDir ).then( ( /*paths*/ ) => {
 				done();
 			} );

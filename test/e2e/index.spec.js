@@ -163,7 +163,7 @@ describe( "Sammler (e2e tests)", () => {
 
 			//Todo: Add more tests
 			//Todo: Add negative tests
-			it( "saves results recursively for root-rep1", ( done ) => {
+			it.skip( "saves results recursively for root-rep1", ( done ) => {
 				var sourceDef = _.find( config.sources, {"name": "root-repo1"} );
 				sourceDef.recursive = true;
 				sammlerGitHub.fetchContents( sourceDef, path.normalize( targetDir ) )
