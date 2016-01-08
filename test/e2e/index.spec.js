@@ -1,5 +1,5 @@
 /* global define, it, describe, beforeEach, afterEach */
-import { Sammler } from "./../../lib/index.js";
+import { SammlerGitHub } from "./../../lib/index.js";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import fsUtils from "fs-utils";

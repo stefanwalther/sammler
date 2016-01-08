@@ -1,8 +1,8 @@
 # sammler-github
 
-[![Codeship Status for stefanwalther/sammler](https://img.shields.io/codeship/3f7e9fc0-8c86-0133-d825-1e10e5e69df6.svg?style=flat-square)](https://codeship.com/projects/123942)
+[![Codeship Status for stefanwalther/sammler-github](https://img.shields.io/codeship/3f7e9fc0-8c86-0133-d825-1e10e5e69df6.svg?style=flat-square)](https://codeship.com/projects/123942)
 
-> sammler (German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
+> sammler-github (sammler is the German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
 
 ## Table of Contents
 
@@ -86,9 +86,9 @@ Basically calls .getContent() and then .saveContents()
 
 ```js
 "use strict";
-var Sammler = require( "./../../dist/" ).Sammler;
+var SammlerGitHub = require( "./../../dist/" ).SammlerGitHub;
 
-var sammler = new Sammler();
+var sammlerGitHub = new SammlerGitHub();
 
 var sourceDef = {
     user: "stefanwalther",
@@ -98,7 +98,7 @@ var sourceDef = {
     recursive: true
 };
 
-sammler.getContent( sourceDef )
+sammlerGitHub.getContent( sourceDef )
     .then( function ( data ) {
         data.results.forEach( function ( item ) {
             console.log( "\t" + item.path );
@@ -121,11 +121,11 @@ sammler.getContent( sourceDef )
 
 ```js
 "use strict";
-var Sammler = require( "./../../dist/" ).Sammler;
+var SammlerGitHub = require( "./../../dist/" ).SammlerGitHub;
 var path = require( "path" );
 var del = require( "del" );
 
-var sammler = new Sammler();
+var sammlerGitHub = new SammlerGitHub();
 
 var sourceDef = {
     user: "stefanwalther",
@@ -138,9 +138,9 @@ var sourceDef = {
 var targetDir = path.join( __dirname, "./.content/" );
 
 del( targetDir ).then( function () { // Clean the targetDir ...
-    sammler.getContent( sourceDef )
+    sammlerGitHub.getContent( sourceDef )
         .then( function ( data ) {
-            sammler.saveContents( sourceDef, data, targetDir )
+            sammlerGitHub.saveContents( sourceDef, data, targetDir )
                 .then( function ( results ) {
                     console.log("Saved all");
                     results.forEach( function ( item ) {
