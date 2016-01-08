@@ -155,7 +155,7 @@ del( targetDir ).then( function () { // Clean the targetDir ...
 
 ### GitHub limits
 
-To overcome the GitHub Api limits create an environment variable called `NODE_SAMMLER_TOKEN`.
+To overcome the GitHub Api limits create an environment variable called `SAMMLER_GITHUB_TOKEN`.
 
 ## Contributing
 
