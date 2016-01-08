@@ -1,5 +1,5 @@
 {
-  "name": "sammler",
+  "name": "sammler-github",
   "version": "0.1.0",
   "description": "Library to fetch content from multiple GitHub repositories.",
   "scripts": {
@@ -12,15 +12,15 @@
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive --compilers js:babel-register",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
-  "homepage": "https://github.com/stefanwalther/sammler#readme",
+  "homepage": "https://github.com/stefanwalther/sammler-github#readme",
   "repository": {
     "type": "git",
-    "url": "http://github.com/stefanwalther/sammler.git"
+    "url": "http://github.com/stefanwalther/sammler-github.git"
   },
   "author": "Stefan Walther",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stefanwalther/sammler/issues"
+    "url": "https://github.com/stefanwalther/sammler-github/issues"
   },
   "files": [
     "./dist"
