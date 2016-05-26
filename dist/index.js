@@ -72,7 +72,7 @@ var SammlerGitHub = exports.SammlerGitHub = (function () {
 		this._init(this.config);
 		this._client = null;
 
-		var authToken = process.env.NODE_SAMMLER_TOKEN;
+		var authToken = process.env.SAMMLER_GITHUB_TOKEN;
 		if (authToken) {
 			this._client = _octonode2.default.client(authToken);
 		} else {
