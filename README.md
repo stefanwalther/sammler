@@ -1,5 +1,7 @@
 # sammler-github-content
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/stefanwalther/sammler-github-content.svg)](https://greenkeeper.io/)
+
 [![Codeship Status for stefanwalther/sammler-github](https://img.shields.io/codeship/3f7e9fc0-8c86-0133-d825-1e10e5e69df6.svg?style=flat-square)](https://codeship.com/projects/123942)
 
 > sammler-github (sammler is the German word for gatherer) is a node.js library to fetch content from several GitHub repositories and save them locally.
